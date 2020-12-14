@@ -58,7 +58,7 @@ function addContentOnClick() {
     let contentRaw = contentStorage[this.innerText.toLowerCase()];
     let makeContent = `<div class="content__header">
     <h1 name="top">
-    ${contentRaw.title.toUpperCase()}
+    ${contentRaw.title}
     </h1>
 </div>
 <div class="content__body">
