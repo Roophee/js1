@@ -1,60 +1,12 @@
 "use strict";
 
-const clickBurger = document.querySelector(".burger");
-const clickContent = document.querySelector(".content");
-const clickHeader = document.querySelector(".header");
-const clickfooter = document.querySelector(".footer");
-
+const burger = document.querySelector(".burger");
+const content = document.querySelector(".content");
 const deBar = document.querySelector(".aside");
-
-
-// MOVE ASIDE & CONTENT
-
-function hideSideBar(e) {
-    e.preventDefault();
-    deBar.classList.toggle('hide__sidebar');
-    clickContent.classList.toggle('move_content');
-    clickBurger.classList.toggle('burger__stop');
-    console.log(e.type)
-
-};
-
-clickBurger.addEventListener('click', hideSideBar);
-
-// Enter-key event show-hide aside
-
-clickBurger.addEventListener('keydown', function (e) {
-    e.preventDefault();
-    if (e.keyCode == "13") {
-        deBar.classList.toggle('hide__sidebar');
-        clickContent.classList.toggle('move_content');
-        clickBurger.classList.toggle('burger__stop');
-    }
-}
-);
-
-// CLOSE ASIDE WHEN MOUSE CLICK OUT
-
-function hideSideBarClickAway(e) {
-    e.preventDefault();
-    for (let i = 0; i < deBar.classList.length; i++) {
-        if (deBar.classList[i] === 'hide__sidebar') {
-            deBar.classList.toggle('hide__sidebar');
-            clickBurger.classList.toggle('burger__stop');
-            clickContent.classList.toggle('move_content');
-        };
-    };
-};
-
-clickContent.addEventListener('click', hideSideBarClickAway);
-clickHeader.addEventListener('click', hideSideBarClickAway);
-clickfooter.addEventListener('click', hideSideBarClickAway);
-
-// CONTENT  STORAGE
-
+const ulElement = document.querySelector(".nav__list");
 
 const contentStorage = {
-    "highway": {
+    highway: {
         "title": " Highway Design and Road Safety",
         "imgurl": "img/road.jpg",
         "alt": "road",
@@ -86,30 +38,68 @@ const contentStorage = {
     },
 };
 
-// ADD CONTENT IN .content
 
-function addContentOnClick() {
-    clickContent.innerHTML = "";
+// MOVE ASIDE & CONTENT
 
-    let contentRaw = contentStorage[this.innerText.toLowerCase()];
-    let makeContent = `<div class="content__header">
-    <h1 name="top">
-    ${contentRaw.title}
-    </h1>
-</div>
-<div class="content__body">
-    <img src="${contentRaw.imgurl}" alt="${contentRaw.alt}" class="content__img">
-    <p>
-        <span class="content__text">
-            ${contentRaw.text}
-        </span>
-    </p>
-</div>`;
-    clickContent.innerHTML = makeContent;
+function hideSideBar(e) {
+    e.preventDefault();
+    console.log(e);
+    deBar.classList.toggle('hide__sidebar');
+    content.classList.toggle('move_content');
+    burger.classList.toggle('burger__stop');
 };
 
-const navLinks = document.querySelectorAll(".nav__link");
+burger.addEventListener('click', hideSideBar);
 
-navLinks.forEach(item => item.addEventListener('click', addContentOnClick));
+// Enter-key event show-hide aside
 
+burger.addEventListener('keydown', function (e) {
+    e.preventDefault();
+    if (e.keyCode == "13") {
+        deBar.classList.toggle('hide__sidebar');
+        content.classList.toggle('move_content');
+        burger.classList.toggle('burger__stop');
+    }
+}
+);
 
+// CLOSE ASIDE WHEN MOUSE CLICK OUT
+
+function hideSideBarClickAway(e) {
+    e.preventDefault();
+    if (!e.target.classList.contains('burger') && !deBar.contains(e.target)) {
+        if (deBar.classList.contains('hide__sidebar')) {
+            deBar.classList.toggle('hide__sidebar');
+            burger.classList.toggle('burger__stop');
+            content.classList.toggle('move_content');
+        };
+    };
+};
+
+document.addEventListener('click', hideSideBarClickAway);
+
+// ADD CONTENT IN .content
+
+function addContentOnClick(e) {
+
+    if (e.target && e.target.nodeName == 'A' || e.target.nodeName == 'SPAN') {
+        content.innerHTML = "";
+        let contentRaw = contentStorage[e.target.innerText.toLowerCase()];
+        let makeContent = `<div class="content__header">
+        <h1 name="top">
+        ${contentRaw.title}
+        </h1>
+    </div>
+    <div class="content__body">
+        <img src="${contentRaw.imgurl}" alt="${contentRaw.alt}" class="content__img">
+        <p>
+            <span class="content__text">
+                ${contentRaw.text}
+            </span>
+        </p>
+    </div>`;
+        content.innerHTML = makeContent;
+    };
+};
+
+ulElement.addEventListener('click', addContentOnClick);
